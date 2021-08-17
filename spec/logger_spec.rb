@@ -14,7 +14,7 @@ RSpec.describe Logger do
     end
 
     context "when called with one or more parameters" do
-      it "does insert log in output buffer" do
+      it "inserts log in output buffer" do
         buffer = StringIO.new
         logger = Logger.new Levels::DEBUG, buffer
         logger.log "Hello"
@@ -32,6 +32,10 @@ RSpec.describe Logger do
         logger.log "more", "log"
         expect(buffer).to have_received(:<<).exactly(5).times
       end
+
+      it "logs with correct level label" 
+      it "logs correct timestamp"
+      it "calls #inspec method in inputs"
     end
   end
 end
