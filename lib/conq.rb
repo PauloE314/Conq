@@ -12,7 +12,7 @@ module Conq
       formatted_date = Time.now.strftime("%Y-%M-%d %H:%M:%S")
 
       input.each do |data|
-        @buffer << "[#{formatted_date}] #{@level.to_s}: #{data.to_s}"
+        @buffer << "[#{formatted_date}] #{@level.to_s}: #{data.to_s}\n"
       end
     end
   end

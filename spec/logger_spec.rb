@@ -70,6 +70,14 @@ RSpec.describe Logger do
         logger.log "Hello"
         expect(buffer).to have_received(:<<).with date_matcher
       end
+
+      it "adds break line at the end of the log" do
+        buffer = instance_double("IO", :<< => nil)
+        logger = Logger.new Levels::DEBUG, buffer
+
+        logger.log "Hello"
+        expect(buffer).to have_received(:<<).with(/.+\n$/)
+      end
     end
   end
 end
