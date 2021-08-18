@@ -53,13 +53,12 @@ RSpec.describe Logger do
       end
 
       it "logs with correct level label" do
-        Levels.constants.each do |level_name|
-          level = Levels.const_get(level_name)
+        Levels.constants.each do |level|
           buffer = instance_double("IO", :<< => nil)
           logger = Logger.new level, buffer
 
           logger.log "Hello"
-          expect(buffer).to have_received(:<<).with(/#{level_name}/i)
+          expect(buffer).to have_received(:<<).with(/#{level}/i)
         end
       end
 
