@@ -1,6 +1,6 @@
 require "rspec"
 require "stringio"
-require_relative "../lib/logging.rb"
+require_relative "../lib/conq.rb"
 
 RSpec.configure do |config|
 

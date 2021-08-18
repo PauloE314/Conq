@@ -1,4 +1,4 @@
-module Logging
+module Conq
   class Logger
     attr_accessor :level
     attr_accessor :buffer

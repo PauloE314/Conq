@@ -1,5 +1,5 @@
-Logger = Logging::Logger
-Levels = Logging::Levels
+Logger = Conq::Logger
+Levels = Conq::Levels
 
 RSpec.describe Logger do
   describe "#log" do
