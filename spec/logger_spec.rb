@@ -5,25 +5,25 @@ RSpec.describe Logger do
   describe "#log" do
     context "when called without any parameter" do
       it "don't insert anything in output buffer" do
-        buffer = StringIO.new
+        buffer = instance_double("IO", :<< => nil)
         logger = Logger.new Levels::DEBUG, buffer
         logger.log
 
-        expect(buffer.string.length).to equal 0
+        expect(buffer).to_not have_received(:<<)
       end
     end
 
     context "when called with one or more parameters" do
       it "inserts log in output buffer" do
-        buffer = StringIO.new
+        buffer = instance_double("IO", :<< => nil)
         logger = Logger.new Levels::DEBUG, buffer
         logger.log "Hello"
 
-        expect(buffer.string.length).to be > 0
+        expect(buffer).to have_received(:<<)
       end
 
       it "logs for each parameter" do
-        buffer = double("buffer", :<< => nil)
+        buffer = instance_double("IO", :<< => nil)
         logger = Logger.new Levels::DEBUG, buffer
         
         logger.log "Some", "random", "parameters"
