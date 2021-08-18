@@ -40,7 +40,7 @@ RSpec.describe Logger do
         logger = Logger.new Levels::DEBUG, buffer
 
         logger.log message
-        expect(buffer).to have_received(:<<).with /#{message}/
+        expect(buffer).to have_received(:<<).with(/#{message}/)
       end
 
       it "calls #to_s method in inputs" do
@@ -59,7 +59,7 @@ RSpec.describe Logger do
           logger = Logger.new level, buffer
 
           logger.log "Hello"
-          expect(buffer).to have_received(:<<).with /#{level_name}/i
+          expect(buffer).to have_received(:<<).with(/#{level_name}/i)
         end
       end
 
