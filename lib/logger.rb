@@ -15,5 +15,11 @@ module Conq
         @buffer << "[#{formatted_date}] #{@level.to_s}: #{data.to_s}\n"
       end
     end
+
+    def config(configuration)
+      raise TypeError, "Unexpected type of 'configuration'" unless configuration.is_a? Hash
+
+      # To Do
+    end
   end
 end

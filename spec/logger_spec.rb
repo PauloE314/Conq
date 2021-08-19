@@ -80,4 +80,20 @@ RSpec.describe Logger do
       end
     end
   end
+
+  describe "#config" do
+    context "when a hash is passed as parameter" do
+    end
+
+    context "when a non-hash object is passed" do
+      it "raises a TypeError" do
+        buffer = instance_double("IO", :<< => nil)
+        logger = Logger.new Levels::DEBUG, buffer
+
+        expect { logger.config "any" }.to raise_error(TypeError)
+        expect { logger.config 2 }.to raise_error(TypeError)
+        expect { logger.config [] }.to raise_error(TypeError)
+      end
+    end
+  end
 end
