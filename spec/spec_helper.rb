@@ -1,7 +1,7 @@
 require "rspec"
 require "stringio"
+require 'simplecov'
 require_relative "../lib/conq.rb"
 
-RSpec.configure do |config|
-
-end
+SimpleCov.start
+RSpec.configure
