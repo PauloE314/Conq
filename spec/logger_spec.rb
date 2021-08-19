@@ -62,7 +62,7 @@ RSpec.describe Logger do
         end
       end
 
-      it "logs correct timestamp" do
+      it "logs correct timestamp format" do
         buffer = instance_double("IO", :<< => nil)
         logger = Logger.new Levels::DEBUG, buffer
         date_matcher = /\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]/ #[2021-08-18 12:00:00]
@@ -83,6 +83,39 @@ RSpec.describe Logger do
 
   describe "#config" do
     context "when a hash is passed as parameter" do
+      date_matcher = /\d{4}-\d{2}-\d{2}/
+
+      context "and 'output' is passed" do
+        it "changes output buffer" do
+          buffer_1 = instance_double("IO", :<< => nil)
+          buffer_2 = instance_double("IO", :<< => nil)
+          logger = Logger.new Levels::DEBUG, buffer_1
+
+          logger.config output: buffer_2
+          expect(logger.buffer).to eql(buffer_2)
+        end
+
+        it "enables logs into this new one" do
+          buffer_1 = instance_double("IO", :<< => nil)
+          buffer_2 = instance_double("IO", :<< => nil)
+          logger = Logger.new Levels::DEBUG, buffer_1
+
+          logger.config output: buffer_2
+          logger.log "Hello"
+          expect(buffer_2).to have_received(:<<)
+        end
+      end
+
+      context "and 'format' is passed" do
+        it "changes log format" do
+          buffer = instance_double("IO", :<< => nil)
+          logger = Logger.new Levels::DEBUG, buffer
+
+          logger.config format: "%{MESSAGE}    [%{TIME}]"
+          logger.log "Hello"
+          expect(buffer).to have_received(:<<).with /Hello    \[\d{2}:\d{2}:\d{2}\]/
+        end
+      end
     end
 
     context "when a non-hash object is passed" do
