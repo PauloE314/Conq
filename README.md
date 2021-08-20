@@ -86,6 +86,15 @@ Conq.debug("New format")
 # %{LEVEL}   -> Log's level
 ```
 
+### **Getting the global log object**
+
+```ruby
+Conq.init()
+
+global = Conq.get_global()
+global.debug("Directly on global object")
+```
+
 ### **Creating custom log objects**
 
 ```ruby
