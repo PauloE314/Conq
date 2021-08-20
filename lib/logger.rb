@@ -4,7 +4,7 @@ module Conq
 
     def initialize(output)
       @output = output
-      @log_format = "[%{DATE} %{TIME}] %{LEVEL}: %{MESSAGE}"
+      @shape = "[%{DATE} %{TIME}] %{LEVEL}: %{MESSAGE}"
     end
 
     def log(level, *input)
@@ -22,7 +22,7 @@ module Conq
           :MESSAGE => message
         }
 
-        @output << (@log_format % values) + "\n"
+        @output << (@shape % values) + "\n"
       end
     end
 
@@ -49,9 +49,8 @@ module Conq
     def config(configuration)
       raise TypeError, "Unexpected type for 'configuration'" unless configuration.is_a? Hash
 
-      @level = configuration[:level] if configuration[:level]
       @output = configuration[:output] if configuration[:output]
-      @log_format = configuration[:format] if configuration[:format]
+      @shape = configuration[:shape] if configuration[:shape]
     end
   end
 end

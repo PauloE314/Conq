@@ -139,9 +139,9 @@ RSpec.describe Logger do
         end
       end
 
-      context "and 'format' is passed" do
-        it "changes log format" do
-          logger.config format: "%{MESSAGE}\t[%{TIME}]"
+      context "and 'shape' is passed" do
+        it "changes log shape" do
+          logger.config shape: "%{MESSAGE}\t[%{TIME}]"
           logger.log Levels::DEBUG, message
           expect(output).to have_received(:<<).with(/Hello\t\[\d{2}:\d{2}:\d{2}\]/)
         end
