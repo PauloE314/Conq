@@ -76,7 +76,7 @@ RSpec.describe Conq do
   end
 
   describe "#warning" do
-    it "calls Logger#warning from global loggerwith correct message" do
+    it "calls Logger#warning from global logger with correct message" do
       logger = Conq.init output
 
       expect(logger).to receive(:warning).with message
