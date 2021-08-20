@@ -5,6 +5,7 @@ Conq is a simple Log library for ruby applications.
 ## **Features**
 
 - Multiple log levels
+- Min level for logs
 - Global logging object
 - Custom and multiple Log objects
 - Custom log message format
@@ -35,7 +36,7 @@ Conq.critical("It's a critical message")
 ```ruby
 log_file = File.open("./log_file.txt", "w")
 
-Conq.init(log_file)
+Conq.init(output: log_file)
 Conq.debug("This message will appear in 'log_file.txt'")
 
 Conq.init()
@@ -43,6 +44,26 @@ Conq.debug("This message will appear in the console")
 
 Conq.config(output: log_file)
 Conq.debug("Now, it'll appear in 'log_file.txt')
+```
+
+### **Setting log's min level**
+
+```ruby
+Conq.init(min_level: Conq::Levels::ERROR)
+Conq.debug("This log will be ignored")
+
+Conq.error("This one will appear in console")
+Conq.critical("This too")
+
+Conq.config(min_level: Conq::Levels::DEBUG)
+Conq.debug("Now, this will be shown")
+
+# Levels in order
+# - DEBUG
+# - INFO
+# - WARNING
+# - ERROR
+# - CRITICAL
 ```
 
 ### **Setting custom message shapes**
