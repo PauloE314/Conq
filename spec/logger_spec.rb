@@ -83,8 +83,6 @@ RSpec.describe Logger do
 
   describe "#config" do
     context "when a hash is passed as parameter" do
-      date_matcher = /\d{4}-\d{2}-\d{2}/
-
       context "and 'output' is passed" do
         it "changes output buffer" do
           buffer_1 = instance_double("IO", :<< => nil)
@@ -111,9 +109,9 @@ RSpec.describe Logger do
           buffer = instance_double("IO", :<< => nil)
           logger = Logger.new Levels::DEBUG, buffer
 
-          logger.config format: "%{MESSAGE}    [%{TIME}]"
+          logger.config format: "%{MESSAGE}\t[%{TIME}]"
           logger.log "Hello"
-          expect(buffer).to have_received(:<<).with /Hello    \[\d{2}:\d{2}:\d{2}\]/
+          expect(buffer).to have_received(:<<).with(/Hello\t\[\d{2}:\d{2}:\d{2}\]/)
         end
       end
     end

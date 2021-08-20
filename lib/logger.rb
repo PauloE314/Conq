@@ -14,7 +14,6 @@ module Conq
       formatted_date = now.strftime("%Y-%M-%d")
       formatted_time = now.strftime("%H:%M:%S")
 
-      
       input.each do |message|
         values = {
           :DATE => formatted_date,
