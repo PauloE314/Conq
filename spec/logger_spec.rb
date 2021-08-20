@@ -4,6 +4,14 @@ Levels = Conq::Levels
 RSpec.describe Logger do
   let(:output) { instance_double("IO", :<< => nil)}
 
+  describe "#output" do
+    it "returns the output object passed in the instantitation" do
+      logger = Logger.new Levels::DEBUG, output
+
+      expect(logger.output).to be_eql(output)
+    end
+  end
+
   describe "#log" do
     context "when called without any parameter" do
       it "don't insert anything in output buffer" do
