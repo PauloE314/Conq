@@ -4,12 +4,16 @@ require_relative "./logger.rb"
 module Conq
   @logger = nil
 
-  def self.init(output)
+  def self.init(output = STDOUT)
     @logger = Logger.new output
   end
 
   def self.get_global
     @logger
+  end
+
+  def self.log(level, *input)
+    @logger.log level, *input
   end
 
   def self.debug(message)

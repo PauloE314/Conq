@@ -6,9 +6,9 @@ RSpec.describe Conq do
 
   describe "#init" do
     it "creates an instance of the 'Logger' class" do
-      global_logger = Conq.init output
+      logger = Conq.init output
 
-      expect(global_logger).to be_a(Conq::Logger)
+      expect(logger).to be_a(Conq::Logger)
     end
 
     it "creates an different instance in every call" do
@@ -17,14 +17,24 @@ RSpec.describe Conq do
 
       expect(logger_1).to_not be_eql(logger_2)
     end
+
+    context "when an output stream is not passed" do
+      it "sets the output object to STDOUT" do
+        logger = Conq.init()
+        
+        expect(logger.output).to be_eql(STDOUT)
+      end
+    end
+
+    
   end
 
   describe "#get_global" do
     context "when called before #init" do
       it "returns nil" do
-        global_logger = Conq.get_global
+        logger = Conq.get_global
 
-        expect(global_logger).to be_nil()
+        expect(logger).to be_nil()
       end
     end
 
