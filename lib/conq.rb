@@ -12,4 +12,27 @@ module Conq
     @logger
   end
 
+  def self.debug(message)
+    @logger.debug message
+  end
+
+  def self.info(message)
+    @logger.info message
+  end
+
+  def self.warning(message)
+    @logger.warning message
+  end
+
+  def self.error(message)
+    @logger.error message
+  end
+
+  def self.critical(message)
+    @logger.critical message
+  end
+
+  def self.config(configuration)
+    @logger.config configuration
+  end
 end
