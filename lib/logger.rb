@@ -1,11 +1,11 @@
 module Conq
   class Logger
     attr_accessor :level
-    attr_accessor :buffer
+    attr_accessor :output
 
-    def initialize(level, buffer)
+    def initialize(level, output)
       @level = level
-      @buffer = buffer
+      @output = output
       @log_format = "[%{DATE} %{TIME}] %{LEVEL}: %{MESSAGE}"
     end
 
@@ -22,7 +22,7 @@ module Conq
           :MESSAGE => message
         }
 
-        @buffer << (@log_format % values) + "\n"
+        @output << (@log_format % values) + "\n"
       end
     end
 
@@ -30,7 +30,7 @@ module Conq
       raise TypeError, "Unexpected type of 'configuration'" unless configuration.is_a? Hash
 
       @level = configuration[:level] if configuration[:level]
-      @buffer = configuration[:output] if configuration[:output]
+      @output = configuration[:output] if configuration[:output]
       @log_format = configuration[:format] if configuration[:format]
     end
   end

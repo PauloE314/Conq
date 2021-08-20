@@ -2,51 +2,47 @@ Logger = Conq::Logger
 Levels = Conq::Levels
 
 RSpec.describe Logger do
+  let(:output) { instance_double("IO", :<< => nil)}
+
   describe "#log" do
     context "when called without any parameter" do
       it "don't insert anything in output buffer" do
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
 
         logger.log
-
-        expect(buffer).to_not have_received(:<<)
+        expect(output).to_not have_received(:<<)
       end
     end
 
     context "when called with one or more parameters" do
       it "inserts log in output buffer" do
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
 
         logger.log "Hello"
-        expect(buffer).to have_received(:<<)
+        expect(output).to have_received(:<<)
       end
 
       it "logs for each parameter" do
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
         
         logger.log "Some", "random", "parameters"
-        expect(buffer).to have_received(:<<).exactly(3).times
+        expect(output).to have_received(:<<).exactly(3).times
 
         logger.log "more", "log"
-        expect(buffer).to have_received(:<<).exactly(5).times
+        expect(output).to have_received(:<<).exactly(5).times
       end
 
       it "logs with correct message" do
         message = "Hello"
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
 
         logger.log message
-        expect(buffer).to have_received(:<<).with(/#{message}/)
+        expect(output).to have_received(:<<).with(/#{message}/)
       end
 
       it "calls #to_s method in inputs" do
         input = instance_double("String", :to_s => "Hello")
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
 
         logger.log input
         expect(input).to have_received(:to_s)
@@ -54,29 +50,26 @@ RSpec.describe Logger do
 
       it "logs with correct level label" do
         Levels.constants.each do |level|
-          buffer = instance_double("IO", :<< => nil)
-          logger = Logger.new level, buffer
+          logger = Logger.new level, output
 
           logger.log "Hello"
-          expect(buffer).to have_received(:<<).with(/#{level}/i)
+          expect(output).to have_received(:<<).with(/#{level}/i)
         end
       end
 
       it "logs correct timestamp format" do
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
         date_matcher = /\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]/ #[2021-08-18 12:00:00]
         
         logger.log "Hello"
-        expect(buffer).to have_received(:<<).with date_matcher
+        expect(output).to have_received(:<<).with(date_matcher)
       end
 
       it "adds break line at the end of the log" do
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
 
         logger.log "Hello"
-        expect(buffer).to have_received(:<<).with(/.+\n$/)
+        expect(output).to have_received(:<<).with(/.+\n$/)
       end
     end
   end
@@ -84,42 +77,38 @@ RSpec.describe Logger do
   describe "#config" do
     context "when a hash is passed as parameter" do
       context "and 'output' is passed" do
-        it "changes output buffer" do
-          buffer_1 = instance_double("IO", :<< => nil)
-          buffer_2 = instance_double("IO", :<< => nil)
-          logger = Logger.new Levels::DEBUG, buffer_1
+        it "changes output object" do
+          new_output = instance_double("IO", :<< => nil)
+          logger = Logger.new Levels::DEBUG, output
 
-          logger.config output: buffer_2
-          expect(logger.buffer).to eql(buffer_2)
+          logger.config output: new_output
+          expect(logger.output).to eql(new_output)
         end
 
         it "enables logs into this new one" do
-          buffer_1 = instance_double("IO", :<< => nil)
-          buffer_2 = instance_double("IO", :<< => nil)
-          logger = Logger.new Levels::DEBUG, buffer_1
+          new_output = instance_double("IO", :<< => nil)
+          logger = Logger.new Levels::DEBUG, output
 
-          logger.config output: buffer_2
+          logger.config output: new_output
           logger.log "Hello"
-          expect(buffer_2).to have_received(:<<)
+          expect(new_output).to have_received(:<<)
         end
       end
 
       context "and 'format' is passed" do
         it "changes log format" do
-          buffer = instance_double("IO", :<< => nil)
-          logger = Logger.new Levels::DEBUG, buffer
+          logger = Logger.new Levels::DEBUG, output
 
           logger.config format: "%{MESSAGE}\t[%{TIME}]"
           logger.log "Hello"
-          expect(buffer).to have_received(:<<).with(/Hello\t\[\d{2}:\d{2}:\d{2}\]/)
+          expect(output).to have_received(:<<).with(/Hello\t\[\d{2}:\d{2}:\d{2}\]/)
         end
       end
     end
 
     context "when a non-hash object is passed" do
       it "raises a TypeError" do
-        buffer = instance_double("IO", :<< => nil)
-        logger = Logger.new Levels::DEBUG, buffer
+        logger = Logger.new Levels::DEBUG, output
 
         expect { logger.config "any" }.to raise_error(TypeError)
         expect { logger.config 2 }.to raise_error(TypeError)
