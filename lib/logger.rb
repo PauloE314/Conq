@@ -1,15 +1,15 @@
 module Conq
   class Logger
-    attr_accessor :level
     attr_accessor :output
 
-    def initialize(level, output)
-      @level = level
+    def initialize(output)
       @output = output
       @log_format = "[%{DATE} %{TIME}] %{LEVEL}: %{MESSAGE}"
     end
 
-    def log(*input)
+    def log(level, *input)
+      raise TypeError, "Unexpected type for 'level'" unless level.is_a? LogLevel
+
       now = Time.now
       formatted_date = now.strftime("%Y-%M-%d")
       formatted_time = now.strftime("%H:%M:%S")
@@ -18,7 +18,7 @@ module Conq
         values = {
           :DATE => formatted_date,
           :TIME => formatted_time,
-          :LEVEL => @level,
+          :LEVEL => level,
           :MESSAGE => message
         }
 
@@ -27,7 +27,7 @@ module Conq
     end
 
     def config(configuration)
-      raise TypeError, "Unexpected type of 'configuration'" unless configuration.is_a? Hash
+      raise TypeError, "Unexpected type for 'configuration'" unless configuration.is_a? Hash
 
       @level = configuration[:level] if configuration[:level]
       @output = configuration[:output] if configuration[:output]

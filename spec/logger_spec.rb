@@ -12,9 +12,8 @@ RSpec.describe Logger do
   end
 
   describe "#log" do
-    context "when called with one or zero parameters" do
+    context "when called with one parameters" do
       it "don't insert anything in output buffer" do
-        logger.log
         logger.log Levels::DEBUG
         expect(output).to_not have_received(:<<)
       end
@@ -32,7 +31,7 @@ RSpec.describe Logger do
 
       context "and the first one is a Level object" do
         it "inserts log in output buffer" do
-          logger.log Levels::DEBUG "Hello"
+          logger.log Levels::DEBUG, "Hello"
           expect(output).to have_received(:<<)
         end
   
@@ -59,7 +58,9 @@ RSpec.describe Logger do
         end
   
         it "logs with correct level label" do
-          Levels.constants.each do |level|
+          Levels.constants.each do |level_name|
+            level = Levels.const_get(level_name)
+            
             logger.log level, "Hello"
             expect(output).to have_received(:<<).with(/#{level}/i)
           end
