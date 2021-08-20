@@ -2,6 +2,7 @@ Logger = Conq::Logger
 Levels = Conq::Levels
 
 RSpec.describe Logger do
+  let(:message) { 'Hello' }
   let(:output) { instance_double("IO", :<< => nil)}
   let(:logger) { Logger.new output }
 
@@ -22,16 +23,16 @@ RSpec.describe Logger do
     context "when called with two or more parameters" do
       context "and the first one is not a Level object" do
         it "raises a TypeError" do
-          expect { logger.log "any", "Hello" }.to raise_error(TypeError)
-          expect { logger.log 2, "Hello" }.to raise_error(TypeError)
-          expect { logger.log [], "Hello" }.to raise_error(TypeError)
-          expect { logger.log Object.new, "Hello" }.to raise_error(TypeError)
+          expect { logger.log "any", message }.to raise_error(TypeError)
+          expect { logger.log 2, message }.to raise_error(TypeError)
+          expect { logger.log [], message }.to raise_error(TypeError)
+          expect { logger.log Object.new, message }.to raise_error(TypeError)
         end
       end
 
       context "and the first one is a Level object" do
         it "inserts log in output buffer" do
-          logger.log Levels::DEBUG, "Hello"
+          logger.log Levels::DEBUG, message
           expect(output).to have_received(:<<)
         end
   
@@ -44,14 +45,12 @@ RSpec.describe Logger do
         end
   
         it "logs with correct message" do
-          message = "Hello"
-
           logger.log Levels::DEBUG, message
           expect(output).to have_received(:<<).with(/#{message}/)
         end
   
         it "calls #to_s method in inputs" do
-          input = instance_double("String", :to_s => "Hello")
+          input = instance_double("String", :to_s => message)
   
           logger.log Levels::DEBUG, input
           expect(input).to have_received(:to_s)
@@ -60,8 +59,8 @@ RSpec.describe Logger do
         it "logs with correct level label" do
           Levels.constants.each do |level_name|
             level = Levels.const_get(level_name)
-            
-            logger.log level, "Hello"
+
+            logger.log level, message
             expect(output).to have_received(:<<).with(/#{level}/i)
           end
         end
@@ -69,15 +68,55 @@ RSpec.describe Logger do
         it "logs correct timestamp format" do
           date_matcher = /\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]/ #[2021-08-18 12:00:00]
           
-          logger.log Levels::DEBUG, "Hello"
+          logger.log Levels::DEBUG, message
           expect(output).to have_received(:<<).with(date_matcher)
         end
   
         it "adds break line at the end of the log" do
-          logger.log Levels::DEBUG, "Hello"
+          logger.log Levels::DEBUG, message
           expect(output).to have_received(:<<).with(/.+\n$/)
         end
       end
+    end
+  end
+
+  describe "#debug" do
+    it "calls #log method with 'DEBUG' level and correct message" do
+      expect(logger).to receive(:log).with(Levels::DEBUG, message)
+
+      logger.debug message
+    end
+  end
+
+  describe "#info" do
+    it "calls #log method with 'INFO' level and correct message" do
+      expect(logger).to receive(:log).with(Levels::INFO, message)
+
+      logger.info message
+    end
+  end
+
+  describe "#warning" do
+    it "calls #log method with 'WARNING' level and correct message" do
+      expect(logger).to receive(:log).with(Levels::WARNING, message)
+
+      logger.warning message
+    end
+  end
+
+  describe "#error" do
+    it "calls #log method with 'ERROR' level and correct message" do
+      expect(logger).to receive(:log).with(Levels::ERROR, message)
+
+      logger.error message
+    end
+  end
+
+  describe "#critical" do
+    it "calls #log method with 'CRITICAL' level and correct message" do
+      expect(logger).to receive(:log).with(Levels::CRITICAL, message)
+
+      logger.critical message
     end
   end
 
@@ -95,7 +134,7 @@ RSpec.describe Logger do
           new_output = instance_double("IO", :<< => nil)
 
           logger.config output: new_output
-          logger.log Levels::DEBUG, "Hello"
+          logger.log Levels::DEBUG, message
           expect(new_output).to have_received(:<<)
         end
       end
@@ -103,7 +142,7 @@ RSpec.describe Logger do
       context "and 'format' is passed" do
         it "changes log format" do
           logger.config format: "%{MESSAGE}\t[%{TIME}]"
-          logger.log Levels::DEBUG, "Hello"
+          logger.log Levels::DEBUG, message
           expect(output).to have_received(:<<).with(/Hello\t\[\d{2}:\d{2}:\d{2}\]/)
         end
       end
@@ -118,21 +157,4 @@ RSpec.describe Logger do
       end
     end
   end
-
-  # describe "#info" do
-  #   it "logs in the 'info' mode"
-  # end
-
-  # describe "#warning" do
-  #   it "logs in the 'warning' mode"
-  # end
-
-  # describe "#error" do
-
-  #   it "logs in the 'error' mode"
-  # end
-
-  # describe "#critical" do
-  #   it "logs
-  # end
 end

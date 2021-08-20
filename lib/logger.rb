@@ -11,8 +11,8 @@ module Conq
       raise TypeError, "Unexpected type for 'level'" unless level.is_a? LogLevel
 
       now = Time.now
-      formatted_date = now.strftime("%Y-%M-%d")
-      formatted_time = now.strftime("%H:%M:%S")
+      formatted_date = now.strftime "%Y-%M-%d" 
+      formatted_time = now.strftime "%H:%M:%S" 
 
       input.each do |message|
         values = {
@@ -24,6 +24,26 @@ module Conq
 
         @output << (@log_format % values) + "\n"
       end
+    end
+
+    def debug(*input)
+      log Levels::DEBUG, *input
+    end
+
+    def info(*input)
+      log Levels::INFO, *input
+    end
+
+    def warning(*input)
+      log Levels::WARNING, *input
+    end
+
+    def error(*input)
+      log Levels::ERROR, *input
+    end
+
+    def critical(*input)
+      log Levels::CRITICAL, *input
     end
 
     def config(configuration)
