@@ -4,39 +4,41 @@ require_relative "./logger.rb"
 module Conq
   @logger = nil
 
-  def self.init(min_level: Levels::DEBUG, output: STDOUT)
-    @logger = Logger.new(min_level, output)
-  end
+  class << self
+    def init(min_level: Levels::DEBUG, output: STDOUT)
+      @logger = Logger.new(min_level, output)
+    end
 
-  def self.get_global()
-    @logger
-  end
+    def get_global()
+      @logger
+    end
 
-  def self.log(level, *input)
-    @logger.log(level, *input)
-  end
+    def log(level, *input)
+      @logger.log(level, *input)
+    end
 
-  def self.debug(message)
-    @logger.debug(message)
-  end
+    def debug(message)
+      @logger.debug(message)
+    end
 
-  def self.info(message)
-    @logger.info(message)
-  end
+    def info(message)
+      @logger.info(message)
+    end
 
-  def self.warning(message)
-    @logger.warning(message)
-  end
+    def warning(message)
+      @logger.warning(message)
+    end
 
-  def self.error(message)
-    @logger.error(message)
-  end
+    def error(message)
+      @logger.error(message)
+    end
 
-  def self.critical(message)
-    @logger.critical(message)
-  end
+    def critical(message)
+      @logger.critical(message)
+    end
 
-  def self.config(configuration)
-    @logger.config(configuration)
+    def config(configuration)
+      @logger.config(configuration)
+    end
   end
 end
