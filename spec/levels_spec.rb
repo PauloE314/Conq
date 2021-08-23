@@ -6,7 +6,7 @@ RSpec.describe Levels do
   it "contains all required levels" do
     expected_levels = [:DEBUG, :INFO, :WARNING, :ERROR, :CRITICAL]
 
-    expect(Levels.constants).to include(*expected_levels)
+    expect(Levels.constants).to match_array(expected_levels)
   end
 
   it "have the correct importance order" do
