@@ -13,7 +13,7 @@ module Conq
       raise TypeError, "Unexpected type for 'level'" unless level.is_a? LogLevel
       return unless level >= min_level
 
-      now = Time.now
+      now = Time.now()
       formatted_date = now.strftime("%Y-%M-%d")
       formatted_time = now.strftime("%H:%M:%S")
 

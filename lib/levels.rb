@@ -22,11 +22,11 @@ module Conq
   end
 
   module Levels
-    DEBUG = LogLevel.new :DEBUG, 1
-    INFO = LogLevel.new :INFO, 2
-    WARNING = LogLevel.new :WARNING, 3
-    ERROR = LogLevel.new :ERROR, 4
-    CRITICAL = LogLevel.new :CRITICAL, 5
+    DEBUG = LogLevel.new(:DEBUG, 1)
+    INFO = LogLevel.new(:INFO, 2)
+    WARNING = LogLevel.new(:WARNING, 3)
+    ERROR = LogLevel.new(:ERROR, 4)
+    CRITICAL = LogLevel.new(:CRITICAL, 5)
   end
 
   private_constant :LogLevel
